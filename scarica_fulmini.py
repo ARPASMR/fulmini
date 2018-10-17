@@ -49,6 +49,11 @@ def gf(nomefile,df,RL,riquadro):
     riquadro= lista contenente le informazioni per la selezione dell'area
     """
     fig = plt.figure(num=None, figsize=(22, 22) )
+    df=df[(df.lat>riquadro[0]) & (df.lat<riquadro[2]) & (df.lon>riquadro[1]) & (df.lon<riquadro[3])]
+    try:
+        ultimo_dato=df.datetime.iloc[-1].strftime('%H:%M')
+    except:
+        ultimo_dato="Nessun dato"
    # read file input con dati
     h=0
     colori=['#8B008B','#C71585','#FF4500','#FFA500','#FFD700','#FFFF00']
@@ -61,19 +66,18 @@ def gf(nomefile,df,RL,riquadro):
         m.drawcoastlines()
         m.drawrivers()
         m.shadedrelief(scale=0.9)
-    plt.title("Fulmini del giorno " + nomefile.split('.')[0]+' alle '+dt.datetime.utcnow().strftime('%H:%M UTC')+' (ultimo dato:'+df.datetime.iloc[-1].strftime('%H:%M')+')')
+    plt.title("Fulmini del giorno " + nomefile.split('.')[0]+' alle '+dt.datetime.utcnow().strftime('%H:%M UTC')+' (ultimo dato:'+ultimo_dato+')')
     print('inizio plottaggio '+ nomefile)
-    df[(df.lat>riquadro[0]) & (df.lat<riquadro[2]) & (df.lon>riquadro[1]) & (df.lon<riquadro[3])]
     numero_fulmini=[]
     for c in colori:
        lats=df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')]
        lons=df.lon[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')]
        lats_c=df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='C')]
-       lons_c=df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='C')]
+       lons_c=df.lon[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='C')]
        x,y=m(lons,lats)
        m.scatter(x,y,color=c,marker="+")
        xc,yc=m(lons_c,lats_c)
-       m.scatter(xc,yc,color=c,marker='o')
+       m.scatter(xc,yc,color=c,marker="o")
        numero_fulmini.append(df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')].count())
        h+=4
     axin=inset_axes(m.ax,width="12%",height="12%",loc=3)
