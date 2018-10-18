@@ -2,7 +2,7 @@
 # script di lancio del processo di graficazione fulmini
 # prende come argomento il numero di secondi di sleeping
 nomescript=${0##*/}
-if [ $1 < 300 ]
+if [ $1 <300 ]
 then
    dormi=300
 else
@@ -11,5 +11,6 @@ fi
 while [ 1 ]
 do
         python scarica_fulmini.py
+        find -mtime 15 -exec rm *.dat *.png '{}' ';'
         sleep $dormi
 done
