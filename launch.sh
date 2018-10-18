@@ -11,6 +11,6 @@ fi
 while [ 1 ]
 do
         python scarica_fulmini.py
-        find -mtime 15 -exec rm *.dat *.png '{}' ';'
+        find -type f -ctime +7 -name "*.dat" -exec rm -vf {} \;
         sleep $dormi
 done
