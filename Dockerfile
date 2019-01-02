@@ -16,5 +16,5 @@ COPY templates/* templates/
 RUN mkdir static
 RUN mkdir static/js
 COPY static/* static/
-COPY static/js/* static/js
+COPY static/js/* static/js/
 CMD ["./launch.sh", "600"]
