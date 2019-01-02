@@ -15,4 +15,6 @@ app.config['AWS_SECRET_ACCESS_KEY']='SECRET_KEY'
 s3=FlaskS3(app)
 @app.route("/")
 def hello():
-    return render_template('fulmini2.html')
+    return render_template('skeleton.html')
+if __name__=="__main__":
+    app.run(port=8890,debug=True)

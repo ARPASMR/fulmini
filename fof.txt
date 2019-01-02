@@ -1,0 +1,4 @@
+./static/ieri-1.png
+./static/ieri.png
+./static/oggi.png
+./static/20181201.png

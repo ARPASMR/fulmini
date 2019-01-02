@@ -1,0 +1,3 @@
+debug=true
+file_of_filenames=./static/fof.txt
+controls = startstop,step,zoom
