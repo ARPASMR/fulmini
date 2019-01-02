@@ -13,4 +13,8 @@ COPY province.* ./
 RUN mkdir templates
 RUN touch file_controllo.txt
 COPY templates/* templates/
+RUN mkdir static
+RUN mkdir static/js
+COPY static/* static/
+COPY static/js/* static/js
 CMD ["./launch.sh", "600"]
