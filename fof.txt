@@ -1,4 +1,4 @@
-./static/ieri-1.png
-./static/ieri.png
-./static/oggi.png
+./static/20181129.png
+./static/20181130.png
+./static/20181201.png
 ./static/20181201.png

@@ -1,4 +1,6 @@
-c:\users\mmussin\fulmini\static\ieri-1.png
-c:\users\mmussin\fulmini\static\ieri.png
-c:\users\mmussin\fulmini\static\oggi.png
-c:\users\mmussin\fulmini\static\20181201.png
+.\static\20181201.png
+.\static\20181202.png
+.\static\20181129.png
+.\static\20181130.png
+.\static\20181004.png
+.\static\20181005.png

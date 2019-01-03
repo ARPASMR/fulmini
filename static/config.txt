@@ -1,3 +1,12 @@
 debug=true
-file_of_filenames=./static/fof.txt
-controls = startstop,step,zoom
+window_size=900,700
+#file_of_filenames=./static/fof.txt
+basename=./static/2018110*.png
+num_frames=9
+base_starting_number=1
+check_image_size = f
+controls = startstop, step, looprock, zoom, refresh
+#dwell = 1000,20,2000,50
+start_looping=false
+controls_style = display:flex;flex-flow:row;
+buttons_style = flex:auto;margin:2px;
