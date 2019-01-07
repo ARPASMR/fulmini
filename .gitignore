@@ -3,3 +3,8 @@ archivio/**
 log/**
 tmp/**
 raw/**
+tast_shape.py
+Grafica_fulmini.py
+*.png
+*.dat
+data/**

@@ -3,6 +3,7 @@
 Created on Tue Oct  2 10:12:46 2018
 
 @author: mmussin
+versione con cartopy al posto di basemap
 
  prendo i fulmini da lampinet
  meccanismo di alimentazione:
@@ -28,13 +29,18 @@ import os
 import datetime as dt
 import pandas as pd
 from ftplib import FTP
-from mpl_toolkits.basemap import Basemap
+# from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
 import warnings
 import matplotlib.cbook
-from minio import Minio
+#from minio import Minio
 warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+# cartopy
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
+from cartopy.io.shapereader import Reader
+
 HOST='meteoranew.protezionecivile.it'
 USER='lombardia'
 PASS=os.getenv('FTP_PASS')
@@ -57,15 +63,31 @@ def gf(nomefile,df,RL,riquadro):
    # read file input con dati
     h=0
     colori=['#8B008B','#C71585','#FF4500','#FFA500','#FFD700','#FFFF00']
-    ax=fig.add_subplot(111)
-    m = Basemap(projection='merc',llcrnrlat=riquadro[0],urcrnrlat=riquadro[2],llcrnrlon=riquadro[1],urcrnrlon=riquadro[3],resolution='i', epsg=4326,ax=ax)
+   
     if RL:
-        m.arcgisimage(service='World_Topo_Map', xpixels = 2000, verbose= True)
-        m.readshapefile('province','Province',color='crimson',linewidth=1)
+        ax=fig.add_subplot(111,projection=ccrs.UTM(zone=32))
+        fname='province.shp'
+        ax.set_extent([riquadro[1],riquadro[3],riquadro[0],riquadro[2]],crs=ccrs.PlateCarree())
+        shape_feature=cfeature.ShapelyFeature(Reader(fname).geometries(),ccrs.PlateCarree(),facecolor='none',edgecolor='green')
+        ax.add_wms(wms='http://www.cartografia.servizirl.it/arcgis/services/wms/DTM5_RL_wms/MapServer/WMSServer',layers=['DTM_5X5'])
+        ax.add_feature(shape_feature)
+        
     else:
-        m.drawcoastlines()
-        m.drawrivers()
-        m.shadedrelief(scale=0.9)
+        ax=fig.add_subplot(111,projection=ccrs.PlateCarree())
+        fname='Reg_2016_LATLON.shp'
+        land_50m=cfeature.NaturalEarthFeature('physical',name='land',scale='10m', facecolor=cfeature.COLORS['land'])
+        LAKES= cfeature.NaturalEarthFeature('physical', 'lakes', '10m', edgecolor='face', facecolor=cfeature.COLORS['water'])
+        RIVERS= cfeature.NaturalEarthFeature('physical', 'rivers_lake_centerlines', '10m', edgecolor=cfeature.COLORS['water'], facecolor='none')
+        COASTLINES= cfeature.NaturalEarthFeature('physical', 'coastline', '10m', edgecolor='black', facecolor='none')
+        STATES= cfeature.NaturalEarthFeature('cultural', 'admin_0_boundary_lines_land', '50m', edgecolor='black', facecolor='none')
+        ax.set_extent([riquadro[1],riquadro[3],riquadro[0],riquadro[2]],crs=ccrs.PlateCarree())
+        shape_feature=cfeature.ShapelyFeature(Reader(fname).geometries(),ccrs.PlateCarree(),facecolor='none',edgecolor='green')
+        ax.add_feature(land_50m)
+        ax.add_feature(shape_feature)
+        ax.add_feature(COASTLINES)
+        ax.add_feature(LAKES)
+        ax.add_feature(RIVERS)
+        ax.add_feature(STATES)
     plt.title("Fulmini del giorno " + nomefile.split('.')[0]+' alle '+dt.datetime.utcnow().strftime('%H:%M UTC')+' (ultimo dato:'+ultimo_dato+')')
     print('inizio plottaggio '+ nomefile)
     numero_fulmini=[]
@@ -74,13 +96,11 @@ def gf(nomefile,df,RL,riquadro):
        lons=df.lon[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')]
        lats_c=df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='C')]
        lons_c=df.lon[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='C')]
-       x,y=m(lons,lats)
-       m.scatter(x,y,color=c,marker="+")
-       xc,yc=m(lons_c,lats_c)
-       m.scatter(xc,yc,color=c,marker="o")
+       ax.scatter(lons,lats,color=c,marker='+')
+       ax.scatter(lons_c,lats_c,color=c,marker='o')
        numero_fulmini.append(df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')].count())
        h+=4
-    axin=inset_axes(m.ax,width="12%",height="12%",loc=3)
+    axin=inset_axes(ax,width="12%",height="12%",loc=3)
     axin.bar([4,8,12,16,20,24],numero_fulmini, width=2,color=colori,tick_label=[4,8,12,16,20,24])
     axin.tick_params(axis='y',direction='in')          
     axin.grid(b=True, axis='y')
@@ -114,7 +134,7 @@ for nf in elenco_file:
     fi=nf[16:24] #fi contiene solo AAAAMMGG
     if ((fi == curdate.strftime('%Y%m%d')) & (not(cntl.nomefile.str.contains(nf).any()))):
         fhandle=open(curdate.strftime('%Y%m%d')+'.dat','a')
-        ftp.retrbinary(comando,fhandle.write)
+        ftp.retrbinary(comando,open(curdate.strftime('%Y%m%d')+'.dat','a').write)
         fhandle.close()
         cntl=cntl.append({'nomefile': nf},ignore_index=True)
 cntl.to_csv(path_or_buf=file_controllo, header=False,index=False)
