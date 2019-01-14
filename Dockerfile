@@ -1,4 +1,4 @@
-FROM conda/miniconda2
+FROM conda/miniconda3
 RUN apt-get update
 RUN apt-get -y install libgl1-mesa-glx
 RUN apt-get -y install vim
