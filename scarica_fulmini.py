@@ -33,7 +33,7 @@ from ftplib import FTP
 import matplotlib.pyplot as plt
 import warnings
 import matplotlib.cbook
-#from minio import Minio
+from minio import Minio
 warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 # cartopy
@@ -129,12 +129,13 @@ except:
 
     #lastdata=df.date.iloc[-1]
 # 3.4.5. elenco file contiene l'elenco dei file su meteora: devo scaricare solo quelli che non ho già scaricato  
+
 for nf in elenco_file:
     comando='RETR '+ nf
     fi=nf[16:24] #fi contiene solo AAAAMMGG
     if ((fi == curdate.strftime('%Y%m%d')) & (not(cntl.nomefile.str.contains(nf).any()))):
-        fhandle=open(curdate.strftime('%Y%m%d')+'.dat','a')
-        ftp.retrbinary(comando,open(curdate.strftime('%Y%m%d')+'.dat','a').write)
+        fhandle=open(curdate.strftime('%Y%m%d')+'.dat','ab')
+        ftp.retrbinary(comando,fhandle.write,8192)
         fhandle.close()
         cntl=cntl.append({'nomefile': nf},ignore_index=True)
 cntl.to_csv(path_or_buf=file_controllo, header=False,index=False)
@@ -142,10 +143,13 @@ cntl.to_csv(path_or_buf=file_controllo, header=False,index=False)
 df=pd.read_csv(filepath_or_buffer=nomefile,sep='\s+',names=['date','time','lat','lon','int','unit','ground'],parse_dates={'datetime':['date','time']})
 riquadro=[36,6,48.2,18.6]
 riquadro_RL=[44.49, 8.10,46.9,11.6]
+print(nomefile)
+print(df)
+
 try: 
     gf(nomefile,df,False,riquadro)
 except:
-    print( 'ERRORE: file '+ nomefile + ' non trovato') 
+    print( 'ERRORE: file '+ nomefile + ' non trovato o errore in gf') 
 try:
     gf(nomefile,df,True,riquadro_RL)
 except:

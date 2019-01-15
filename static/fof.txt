@@ -4,3 +4,5 @@
 .\static\20181130.png
 .\static\20181004.png
 .\static\20181005.png
+.\static\20190115.png
+.\static\20190115_RL.png

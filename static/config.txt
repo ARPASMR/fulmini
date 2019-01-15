@@ -1,7 +1,7 @@
 debug=true
 window_size=900,700
-#file_of_filenames=./static/fof.txt
-basename=./static/2018110*.png
+file_of_filenames=./static/fof.txt
+#basename=./static/201*????.png
 num_frames=9
 base_starting_number=1
 check_image_size = f

@@ -3,6 +3,7 @@ RUN apt-get update
 RUN apt-get -y install libgl1-mesa-glx
 RUN apt-get -y install vim
 RUN apt-get -y install curl
+RUN apt-get -y install procps
 RUN conda install pandas
 RUN conda install -c scitools cartopy
 RUN pip install minio
@@ -23,4 +24,4 @@ RUN mkdir static
 RUN mkdir static/js
 COPY static/* static/
 COPY static/js/* static/js/
-#CMD ["./launch.sh", "600"]
+CMD ["./launch.sh", "600"]
