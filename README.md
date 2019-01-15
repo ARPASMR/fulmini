@@ -13,5 +13,8 @@ Solo codice scritto in python distinto in due:
 
 -> acquisizione e graficazione dei dati dei fulmini: le immagini vengono salvate in minio nel buket lampinet
 
+# Branch cartopy
+Uguale a lampi ma con libreria cartopy anzichè Basemap e Python 3. anzichè 2.7
+
 # to do
 vedere issues
