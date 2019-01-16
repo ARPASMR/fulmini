@@ -69,11 +69,14 @@ def gf(nomefile,df,RL,riquadro):
         fname='province.shp'
         ax.set_extent([riquadro[1],riquadro[3],riquadro[0],riquadro[2]],crs=ccrs.PlateCarree())
         shape_feature=cfeature.ShapelyFeature(Reader(fname).geometries(),ccrs.PlateCarree(),facecolor='none',edgecolor='green')
+        fname='Reg_2016_LATLON.shp'
+        ax.set_extent([riquadro[1],riquadro[3],riquadro[0],riquadro[2]],crs=ccrs.PlateCarree())
+        shape_feature=cfeature.ShapelyFeature(Reader(fname).geometries(),ccrs.PlateCarree(),facecolor='none',edgecolor='black')
         ax.add_wms(wms='http://www.cartografia.servizirl.it/arcgis/services/wms/DTM5_RL_wms/MapServer/WMSServer',layers=['DTM_5X5'])
         ax.add_feature(shape_feature)
         
     else:
-        ax=fig.add_subplot(111,projection=ccrs.PlateCarree())
+        ax=fig.add_subplot(111,projection=ccrs.UTM(zone=32))
         fname='Reg_2016_LATLON.shp'
         land_50m=cfeature.NaturalEarthFeature('physical',name='land',scale='10m', facecolor=cfeature.COLORS['land'])
         LAKES= cfeature.NaturalEarthFeature('physical', 'lakes', '10m', edgecolor='face', facecolor=cfeature.COLORS['water'])
@@ -88,7 +91,7 @@ def gf(nomefile,df,RL,riquadro):
         ax.add_feature(LAKES)
         ax.add_feature(RIVERS)
         ax.add_feature(STATES)
-    plt.title("Fulmini del giorno " + nomefile.split('.')[0]+' alle '+dt.datetime.utcnow().strftime('%H:%M UTC')+' (ultimo dato:'+ultimo_dato+')')
+    plt.title("Fulmini del giorno " + nomefile.split('.')[0]+' alle '+dt.datetime.utcnow().strftime('%H:%M UTC')+' (ultimo dato:'+ultimo_dato+')',fontdict={'fontsize' : 20})
     print('inizio plottaggio '+ nomefile)
     numero_fulmini=[]
     for c in colori:
@@ -96,8 +99,8 @@ def gf(nomefile,df,RL,riquadro):
        lons=df.lon[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')]
        lats_c=df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='C')]
        lons_c=df.lon[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='C')]
-       ax.scatter(lons,lats,color=c,marker='+')
-       ax.scatter(lons_c,lats_c,color=c,marker='o')
+       ax.plot(lons,lats,color=c,marker='+',linestyle='',transform=ccrs.PlateCarree())
+       ax.plot(lons_c,lats_c,color=c,marker='o',linestyle='',transform=ccrs.PlateCarree())
        numero_fulmini.append(df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')].count())
        h+=4
     axin=inset_axes(ax,width="12%",height="12%",loc=3)
