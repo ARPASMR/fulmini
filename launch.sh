@@ -15,5 +15,8 @@ do
         python scarica_fulmini.py
         find -type f -ctime +7 -name "*.dat" -exec rm -vf {} \;
 	mv *.png ./static/
+        ps -ef|grep launch_flask|grep -v grep|awk '{print $2}'|xargs kill -9
+	ls -L ./static/*.png > ./static/fof.txt
+	./launch_flask.sh &
         sleep $dormi
 done

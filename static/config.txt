@@ -1,4 +1,4 @@
-debug=true
+debug=false
 window_size=900,700
 file_of_filenames=./static/fof.txt
 #basename=./static/201*????.png
