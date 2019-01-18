@@ -48,7 +48,7 @@ REMOTE_DIR='/lampi'
 ftp=FTP()
 # funzione di graficazione fulmini
 
-import gf2
+import gf
 
 # 1.
 ftp.connect(host='proxy2.arpa.local',port=2121)
