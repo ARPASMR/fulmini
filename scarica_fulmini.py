@@ -33,7 +33,7 @@ from ftplib import FTP
 import matplotlib.pyplot as plt
 import warnings
 import matplotlib.cbook
-from minio import Minio
+#from minio import Minio
 warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 # cartopy
@@ -43,72 +43,11 @@ from cartopy.io.shapereader import Reader
 
 HOST='meteoranew.protezionecivile.it'
 USER='lombardia'
-PASS=os.getenv('FTP_PASS')
+#PASS=os.getenv('FTP_PASS')
 REMOTE_DIR='/lampi'
 ftp=FTP()
 # funzione di graficazione fulmini
-def gf(nomefile,df,RL,riquadro):
-    """
-    nomefile= nome del file da leggere che contiene i dati (però il file non viene letto)
-    df      = dataframe (viene passato direttamente in modo da non leggere da file tutte le volte)
-    RL      = variabile booleana per sapere se il plottaggio riguarda la Lombardia, altrimenti plotta sull'Italia
-    riquadro= lista contenente le informazioni per la selezione dell'area
-    """
-    fig = plt.figure(num=None, figsize=(22, 22) )
-    df=df[(df.lat>riquadro[0]) & (df.lat<riquadro[2]) & (df.lon>riquadro[1]) & (df.lon<riquadro[3])]
-    try:
-        ultimo_dato=df.datetime.iloc[-1].strftime('%H:%M')
-    except:
-        ultimo_dato="Nessun dato"
-   # read file input con dati
-    h=0
-    colori=['#8B008B','#C71585','#FF4500','#FFA500','#FFD700','#FFFF00']
-   
-    if RL:
-        ax=fig.add_subplot(111,projection=ccrs.UTM(zone=32))
-        fname='province.shp'
-        ax.set_extent([riquadro[1],riquadro[3],riquadro[0],riquadro[2]],crs=ccrs.PlateCarree())
-        shape_feature=cfeature.ShapelyFeature(Reader(fname).geometries(),ccrs.PlateCarree(),facecolor='none',edgecolor='green')
-        ax.add_wms(wms='http://www.cartografia.servizirl.it/arcgis/services/wms/DTM5_RL_wms/MapServer/WMSServer',layers=['DTM_5X5'])
-        ax.add_feature(shape_feature)
-        
-    else:
-        ax=fig.add_subplot(111,projection=ccrs.PlateCarree())
-        fname='Reg_2016_LATLON.shp'
-        land_50m=cfeature.NaturalEarthFeature('physical',name='land',scale='10m', facecolor=cfeature.COLORS['land'])
-        LAKES= cfeature.NaturalEarthFeature('physical', 'lakes', '10m', edgecolor='face', facecolor=cfeature.COLORS['water'])
-        RIVERS= cfeature.NaturalEarthFeature('physical', 'rivers_lake_centerlines', '10m', edgecolor=cfeature.COLORS['water'], facecolor='none')
-        COASTLINES= cfeature.NaturalEarthFeature('physical', 'coastline', '10m', edgecolor='black', facecolor='none')
-        STATES= cfeature.NaturalEarthFeature('cultural', 'admin_0_boundary_lines_land', '50m', edgecolor='black', facecolor='none')
-        ax.set_extent([riquadro[1],riquadro[3],riquadro[0],riquadro[2]],crs=ccrs.PlateCarree())
-        shape_feature=cfeature.ShapelyFeature(Reader(fname).geometries(),ccrs.PlateCarree(),facecolor='none',edgecolor='green')
-        ax.add_feature(land_50m)
-        ax.add_feature(shape_feature)
-        ax.add_feature(COASTLINES)
-        ax.add_feature(LAKES)
-        ax.add_feature(RIVERS)
-        ax.add_feature(STATES)
-    plt.title("Fulmini del giorno " + nomefile.split('.')[0]+' alle '+dt.datetime.utcnow().strftime('%H:%M UTC')+' (ultimo dato:'+ultimo_dato+')')
-    print('inizio plottaggio '+ nomefile)
-    numero_fulmini=[]
-    for c in colori:
-       lats=df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')]
-       lons=df.lon[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')]
-       lats_c=df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='C')]
-       lons_c=df.lon[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='C')]
-       ax.scatter(lons,lats,color=c,marker='+')
-       ax.scatter(lons_c,lats_c,color=c,marker='o')
-       numero_fulmini.append(df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')].count())
-       h+=4
-    axin=inset_axes(ax,width="12%",height="12%",loc=3)
-    axin.bar([4,8,12,16,20,24],numero_fulmini, width=2,color=colori,tick_label=[4,8,12,16,20,24])
-    axin.tick_params(axis='y',direction='in')          
-    axin.grid(b=True, axis='y')
-    if RL:
-        plt.savefig(nomefile.split('.')[0]+'_RL.png',bbox_inches='tight')         
-    else:
-        plt.savefig(nomefile.split('.')[0]+'.png',bbox_inches='tight')         
-    plt.show()
+import gf
 # 1.
 ftp.connect(host='proxy2.arpa.local',port=2121)
 ftp.set_debuglevel(0)
@@ -141,17 +80,15 @@ for nf in elenco_file:
 cntl.to_csv(path_or_buf=file_controllo, header=False,index=False)
 # read file input con dati
 df=pd.read_csv(filepath_or_buffer=nomefile,sep='\s+',names=['date','time','lat','lon','int','unit','ground'],parse_dates={'datetime':['date','time']})
-riquadro=[36,6,48.2,18.6]
+riquadro=[36,6,48.2,19]
 riquadro_RL=[44.49, 8.10,46.9,11.6]
-print(nomefile)
-print(df)
 
 try: 
-    gf(nomefile,df,False,riquadro)
+    gf.graf(nomefile,df,False,riquadro)
 except:
     print( 'ERRORE: file '+ nomefile + ' non trovato o errore in gf') 
 try:
-    gf(nomefile,df,True,riquadro_RL)
+    gf.graf(nomefile,df,True,riquadro_RL)
 except:
     print('ERRORE: non riuscito plottaggio RL per '+ nomefile)   
 # trasferimento a minio    
