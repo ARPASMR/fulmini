@@ -25,30 +25,34 @@ def graf(nomefile,df):
     df      = dataframe (viene passato direttamente in modo da non leggere da file tutte le volte)
     RL      = variabile booleana per sapere se il plottaggio riguarda la Lombardia, altrimenti plotta sull'Italia
     riquadro= lista contenente le informazioni per la selezione dell'area
-    
+
     """
-    fig = plt.figure(num=None, figsize=(10, 5),dpi=80 )
+    # formattazione della figura
+    fig = plt.figure(num=None, figsize=(20, 9),dpi=160 )
+    #formattazione del primo subplot: Italia
+    ax=fig.add_subplot(1,2,1,projection=ccrs.PlateCarree())
+    ax.set_extent([6,19,36,48.2],crs=ccrs.PlateCarree())
     plt.suptitle("Fulmini del giorno " + nomefile.split('.')[0]+' alle '+dt.datetime.utcnow().strftime('%H:%M UTC'), fontsize=16)
-   # read file input con dati
     h=0
     colori=['#8B008B','#C71585','#FF4500','#FFA500','#FFD700','#FFFF00']
 
-    #Italia
     riquadro=[36,6,48.2,19]
     #df1=df
     df1=df[(df.lat>riquadro[0]) & (df.lat<riquadro[2]) & (df.lon>riquadro[1]) & (df.lon<riquadro[3])]
-    
+
     try:
         ultimo_dato=df1.datetime.iloc[-1].strftime('%H:%M')
     except:
         ultimo_dato="Nessun dato"
-    #ax=fig.add_subplot(1,2,1,projection=ccrs.UTM(zone=32))
+
     ax=fig.add_subplot(1,2,1,projection=ccrs.PlateCarree())
-    #ax.set_extent([50000,1850000,4000000,5250000],crs=ccrs.UTM(zone=32))
     ax.set_extent([6,19,36,48.2],crs=ccrs.PlateCarree())
-       
+
         #land_50m=cfeature.NaturalEarthFeature('physical',name='land',scale='10m')
         #ax.add_feature(land_50m, facecolor=cfeature.COLORS['land'])
+    fname='Reg_2016_LATLON.shp'
+    shape_feature=cfeature.ShapelyFeature(Reader(fname).geometries(),ccrs.PlateCarree(),facecolor=cfeature.COLORS['land'],edgecolor='green')
+    ax.add_feature(shape_feature,zorder=3)
     LAKES= cfeature.NaturalEarthFeature('physical', 'lakes', '10m', edgecolor='face', facecolor=cfeature.COLORS['water'])
     ax.add_feature(LAKES)
     RIVERS= cfeature.NaturalEarthFeature('physical', 'rivers_lake_centerlines', '10m', edgecolor=cfeature.COLORS['water'], facecolor='none')
@@ -58,31 +62,29 @@ def graf(nomefile,df):
     #OCEAN= cfeature.NaturalEarthFeature('physical', 'ocean', '50m', edgecolor='none')
     #ax.add_feature(OCEAN)
     #STATES= cfeature.NaturalEarthFeature('cultural', 'admin_0_boundary_lines_land', '50m' )
-    #ax.add_feature(STATES, edgecolor='black' )        
-    fname='Reg_2016_LATLON.shp'       
-    shape_feature=cfeature.ShapelyFeature(Reader(fname).geometries(),ccrs.PlateCarree(),facecolor=cfeature.COLORS['land'],edgecolor='green')
-    ax.add_feature(shape_feature,zorder=1)     
+    #ax.add_feature(STATES, edgecolor='black' )
+
     numero_fulmini=[]
     for c in colori:
-       lats=df1.lat[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='G')]
-       lons=df1.lon[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='G')]
-       lats_c=df1.lat[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='C')]
-       lons_c=df1.lon[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='C')]
+       lats=df.lat[(df1.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')]
+       lons=df.lon[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')]
+       lats_c=df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='C')]
+       lons_c=df.lon[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='C')]
        try:
-           ax.plot(lons,lats,color=c,marker='o',linestyle='',transform=ccrs.PlateCarree())
-           ax.plot(lons_c,lats_c,color=c,marker='+',linestyle='',transform=ccrs.PlateCarree())
+           ax.plot(lons,lats,color=c,marker='o',linestyle='')
+           ax.plot(lons_c,lats_c,color=c,marker='+',linestyle='')
        except:
            print("Problema plottaggio")
-       numero_fulmini.append(df1.lat[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='G')].count())
+       numero_fulmini.append(df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')].count())
        h+=4
     axin=inset_axes(ax,width="12%",height="12%",loc=3)
     axin.bar([4,8,12,16,20,24],numero_fulmini, width=2,color=colori,tick_label=[4,8,12,16,20,24])
-    axin.tick_params(axis='y',direction='in')          
-    axin.grid(b=True, axis='y')    
+    axin.tick_params(axis='y',direction='in')
+    axin.grid(b=True, axis='y')
     ax.set_title(' (ultimo dato:'+ultimo_dato+')',fontdict = {'fontsize' : 14})
-    
-    
-    # Regione Lombardia        
+
+
+    # Regione Lombardia
     riquadro=[44.2, 8.0,47.1,11.8]
     h=0
     df=df[(df.lat>riquadro[0]) & (df.lat<riquadro[2]) & (df.lon>riquadro[1]) & (df.lon<riquadro[3])]
@@ -91,7 +93,7 @@ def graf(nomefile,df):
     except:
         ultimo_dato="Nessun dato"
     ax2=fig.add_subplot(1,2,2,projection=ccrs.UTM(zone=32))
-    
+
     numero_fulmini=[]
     for c in colori:
        lats=df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')]
@@ -113,24 +115,24 @@ def graf(nomefile,df):
         ax2.add_feature(shape_feature)
     except:
         print("WMS RL non disponibile")
+        ax2.add_wms(wms='http://www.cartografia.servizirl.it/arcgis/services/wms/dtm20_utm_wms/MapServer/WMSServer',layers=['0'])
     fname='Reg_2016_LATLON.shp'
     ax2.set_extent([riquadro[1],riquadro[3],riquadro[0],riquadro[2]],crs=ccrs.PlateCarree())
     shape_feature=cfeature.ShapelyFeature(Reader(fname).geometries(),ccrs.PlateCarree(),facecolor='none',edgecolor='black')
     ax2.add_feature(shape_feature,zorder=1)
     axin=inset_axes(ax2,width="12%",height="12%",loc=3)
     axin.bar([4,8,12,16,20,24],numero_fulmini, width=2,color=colori,tick_label=[4,8,12,16,20,24])
-    axin.tick_params(axis='y',direction='in')          
+    axin.tick_params(axis='y',direction='in')
     axin.grid(b=True, axis='y')
     ax2.set_title(' (ultimo dato:'+ultimo_dato+')',fontdict = {'fontsize' : 14})
-   
+
 #    print('inizio plottaggio '+ nomefile)
     plt.show()
     df.to_csv(path_or_buf=nomefile.split('.')[0]+'_RL.dat',header=False,index=False)
+    #qui va aggiunta la parte di scrittura nel dbFULMINI
     nomefile_out=nomefile.split('.')[0]+'.png'
     print(nomefile_out)
     try:
-        plt.savefig(nomefile_out,dpi=80) 
+        plt.savefig(nomefile_out,dpi=80)
     except:
         print("Figura non salvata")
-
-    
