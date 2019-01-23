@@ -133,6 +133,6 @@ def graf(nomefile,df):
     nomefile_out=nomefile.split('.')[0]+'.png'
     print(nomefile_out)
     try:
-        plt.savefig(nomefile_out,dpi=80)
+        plt.savefig(nomefile_out,dpi=160)
     except:
         print("Figura non salvata")
