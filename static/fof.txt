@@ -1,4 +1,9 @@
 ./static/20190115.png
-./static/20190115_RL.png
 ./static/20190116.png
-./static/20190116_RL.png
+./static/20190117.png
+./static/20190118.png
+./static/20190119.png
+./static/20190120.png
+./static/20190121.png
+./static/20190122.png
+./static/20190123.png

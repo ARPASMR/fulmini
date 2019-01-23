@@ -1,5 +1,5 @@
 debug=false
-window_size=900,700
+window_size=1200,700
 file_of_filenames=./static/fof.txt
 #basename=./static/201*????.png
 num_frames=9

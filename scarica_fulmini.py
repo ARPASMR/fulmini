@@ -33,7 +33,7 @@ from ftplib import FTP
 import matplotlib.pyplot as plt
 import warnings
 import matplotlib.cbook
-#from minio import Minio
+from minio import Minio
 warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 # cartopy
