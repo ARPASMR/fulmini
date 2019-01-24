@@ -71,8 +71,8 @@ def graf(nomefile,df):
        lats_c=df1.lat[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='C')]
        lons_c=df1.lon[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='C')]
        try:
-           ax.plot(lons,lats,color=c,marker='o',linestyle='',zorder=1)
-           ax.plot(lons_c,lats_c,color=c,marker='+',linestyle='',zorder=1)
+           ax.plot(lons,lats,color=c,marker='+',linestyle='',zorder=1)
+           ax.plot(lons_c,lats_c,color=c,marker='.',linestyle='',zorder=1)
        except:
            print("Problema plottaggio")
        numero_fulmini.append(df1.lat[(df.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='G')].count())
@@ -101,8 +101,8 @@ def graf(nomefile,df):
        lats_c=df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='C')]
        lons_c=df.lon[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='C')]
        try:
-           ax2.plot(lons,lats,color=c,marker='o',linestyle='',transform=ccrs.PlateCarree())
-           ax2.plot(lons_c,lats_c,color=c,marker='+',linestyle='',transform=ccrs.PlateCarree())
+           ax2.plot(lons,lats,color=c,marker='+',linestyle='',transform=ccrs.PlateCarree())
+           ax2.plot(lons_c,lats_c,color=c,marker='.',linestyle='',transform=ccrs.PlateCarree())
        except:
            print("Problema plottaggio RL")
        numero_fulmini.append(df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')].count())
