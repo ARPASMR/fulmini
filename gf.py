@@ -28,7 +28,7 @@ def graf(nomefile,df):
 
     """
     # formattazione della figura
-    fig = plt.figure(num=None, figsize=(20, 9),dpi=160 )
+    fig = plt.figure(num=None, figsize=(16,7 ),dpi=160 )
     #formattazione del primo subplot: Italia
     ax=fig.add_subplot(1,2,1,projection=ccrs.PlateCarree())
     ax.set_extent([6,19,36,48.2],crs=ccrs.PlateCarree())
@@ -52,7 +52,7 @@ def graf(nomefile,df):
         #ax.add_feature(land_50m, facecolor=cfeature.COLORS['land'])
     fname='Reg_2016_LATLON.shp'
     shape_feature=cfeature.ShapelyFeature(Reader(fname).geometries(),ccrs.PlateCarree(),facecolor=cfeature.COLORS['land'],edgecolor='green')
-    ax.add_feature(shape_feature,zorder=3)
+    ax.add_feature(shape_feature,zorder=-1)
     LAKES= cfeature.NaturalEarthFeature('physical', 'lakes', '10m', edgecolor='face', facecolor=cfeature.COLORS['water'])
     ax.add_feature(LAKES)
     RIVERS= cfeature.NaturalEarthFeature('physical', 'rivers_lake_centerlines', '10m', edgecolor=cfeature.COLORS['water'], facecolor='none')
@@ -66,16 +66,16 @@ def graf(nomefile,df):
 
     numero_fulmini=[]
     for c in colori:
-       lats=df.lat[(df1.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')]
-       lons=df.lon[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')]
-       lats_c=df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='C')]
-       lons_c=df.lon[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='C')]
+       lats=df1.lat[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='G')]
+       lons=df1.lon[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='G')]
+       lats_c=df1.lat[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='C')]
+       lons_c=df1.lon[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='C')]
        try:
-           ax.plot(lons,lats,color=c,marker='o',linestyle='')
-           ax.plot(lons_c,lats_c,color=c,marker='+',linestyle='')
+           ax.plot(lons,lats,color=c,marker='o',linestyle='',zorder=1)
+           ax.plot(lons_c,lats_c,color=c,marker='+',linestyle='',zorder=1)
        except:
            print("Problema plottaggio")
-       numero_fulmini.append(df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')].count())
+       numero_fulmini.append(df1.lat[(df.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='G')].count())
        h+=4
     axin=inset_axes(ax,width="12%",height="12%",loc=3)
     axin.bar([4,8,12,16,20,24],numero_fulmini, width=2,color=colori,tick_label=[4,8,12,16,20,24])
