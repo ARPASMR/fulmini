@@ -71,8 +71,8 @@ def graf(nomefile,df):
        lats_c=df1.lat[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='C')]
        lons_c=df1.lon[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='C')]
        try:
-           ax.plot(lons,lats,color=c,marker='+',linestyle='',zorder=1)
-           ax.plot(lons_c,lats_c,color=c,marker='.',linestyle='',zorder=1)
+           ax.plot(lons,lats,color=c,marker='+',markersize=4,linestyle='',zorder=1)
+           ax.plot(lons_c,lats_c,color=c,marker='.',markersize=4,linestyle='',zorder=1)
        except:
            print("Problema plottaggio")
        numero_fulmini.append(df1.lat[(df.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='G')].count())
