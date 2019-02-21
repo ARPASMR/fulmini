@@ -2,6 +2,7 @@ debug=false
 window_size=1200,700
 file_of_filenames=./static/fof.txt
 #basename=./static/201*????.png
+wheel_frames = true
 num_frames=9
 base_starting_number=1
 check_image_size = f

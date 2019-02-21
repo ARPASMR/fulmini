@@ -8,7 +8,7 @@ var HAniS = new function() {
   divanim, divtop, prefHgt, prefWid, imgCan,
   ctx, ctx1, drwCan, ctxd, topCan, ctxtop,
   usingZip, zipFilename, zipOnly, zipFile, zipStatic,
-  backFilesUrl, numFrames, backFiles,
+  backFilesUrl, numFrames, backFiles, useWheelFrame,
   numOverlays, overlayTop, overlayLabels,overlayOrder, overlayFiles, overlayFilesUrl,
   overlayLinks, fofBase, imageBase, configImageBase, backImages, overlayImages,
   overlayCheck, overlayAlpha, overlayStatic, showTip, tipText, tipX, tipY,
@@ -476,7 +476,7 @@ var HAniS = new function() {
       if (cv == "true") {
         debugWindow = window.open("","HAniSDebugInfo","scrollbars=yes,width=400,height=200");
         debug = true;
-        info("HAniS Version 4.23");
+        info("HAniS Version 4.24a");
       } else {
         debug = false;
       }
@@ -1348,6 +1348,12 @@ var HAniS = new function() {
       popupWinHeight = a[1];
     }
 
+    useWheelFrame = false;
+    cv = configValues["wheel_frames"];
+    if (cv != null) {
+      useWheelFrame = true;
+      pointer.useWheel(HAniS.wheel);
+    }
 
     enableZooming = false;
     wasZooming = false;
@@ -1358,6 +1364,7 @@ var HAniS = new function() {
         pointer.useWheel(HAniS.wheel);
       }
     }
+
 
     cycleZoom = false;
     cv = configValues["cycle_zoom"];
@@ -4687,6 +4694,11 @@ var HAniS = new function() {
   }
 
   this.wheel = function(inout) {
+    if (useWheelFrame) {
+      incCurrentFrame(inout);
+      return;
+    }
+
     if (!enableZooming) return;
     xScreen = pointer.getX();
     xLoc = xScreen * canXScale;
@@ -6065,5 +6077,3 @@ var HAniS = new function() {
   }
 
 }
-
-
