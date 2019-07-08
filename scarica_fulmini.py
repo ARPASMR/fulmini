@@ -103,3 +103,27 @@ try:
         print(minioClient.put_object('lampinet',nomeimgRL,file_data,file_stat.st_size))
 except:
     print ('something went wrong with RL')
+# trasferimento al dB
+import os
+import pandas as pd
+# import numpy as np
+from sqlalchemy import *
+import datetime as dt
+import json as js
+if (AUTORE==None):
+    IRIS_USER_ID=os.getenv('IRIS_USER_ID')
+    IRIS_USER_PWD=os.getenv('IRIS_USER_PWD')
+    IRIS_DB_NAME=os.getenv('IRIS_DB_NAME')
+    IRIS_DB_HOST=os.getenv('IRIS_DB_HOST')
+IRIS_SCHEMA_NAME='public'
+engine = create_engine('postgresql+pg8000://'+IRIS_USER_ID+':'+IRIS_USER_PWD+'@'+IRIS_DB_HOST+'/'+IRIS_DB_NAME)
+conn=engine.connect()
+nf=nomefile.split('.')[0]+'_RL.dat'
+df=pd.read_csv(nf,sep=',',header=None,names=['data_e_ora','lat','lon','int','unit','ground'])
+sql = '''\
+INSERT INTO public.stroke (data_e_ora, int, ground, geometry) 
+VALUES(%s,%s,%s,ST_SetSRID(ST_MakePoint(%s, %s), 4326));
+'''
+for i in df.itertuples():
+    vars=[i.data_e_ora,i.int,i.ground,i.lon,i.lat]
+    conn.execute(sql, vars)    
