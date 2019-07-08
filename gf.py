@@ -66,10 +66,10 @@ def graf(nomefile,df):
 
     numero_fulmini=[]
     for c in colori:
-       lats=df1.lat[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='G')]
-       lons=df1.lon[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='G')]
-       lats_c=df1.lat[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='C')]
-       lons_c=df1.lon[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='C')]
+       lats=df1.lat[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<h+4-1) & (df1.ground=='G')]
+       lons=df1.lon[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<h+4-1) & (df1.ground=='G')]
+       lats_c=df1.lat[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<h+4-1) & (df1.ground=='C')]
+       lons_c=df1.lon[(df1.datetime.dt.hour>=h) & (df1.datetime.dt.hour<h+4-1) & (df1.ground=='C')]
        try:
            ax.plot(lons,lats,color=c,marker='+',markersize=4,linestyle='',zorder=1)
            ax.plot(lons_c,lats_c,color=c,marker='.',markersize=4,linestyle='',zorder=1)
@@ -87,28 +87,28 @@ def graf(nomefile,df):
     # Regione Lombardia
     riquadro=[44.2, 8.0,47.1,11.8]
     h=0
-    df=df[(df.lat>riquadro[0]) & (df.lat<riquadro[2]) & (df.lon>riquadro[1]) & (df.lon<riquadro[3])]
+    df2=df[(df.lat>riquadro[0]) & (df.lat<riquadro[2]) & (df.lon>riquadro[1]) & (df.lon<riquadro[3])]
     try:
-        ultimo_dato=df.datetime.iloc[-1].strftime('%H:%M')
+        ultimo_dato=df2.datetime.iloc[-1].strftime('%H:%M')
     except:
         ultimo_dato="Nessun dato"
     ax2=fig.add_subplot(1,2,2,projection=ccrs.UTM(zone=32))
 
     numero_fulmini=[]
     for c in colori:
-       lats=df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')]
-       lons=df.lon[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')]
-       lats_c=df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='C')]
-       lons_c=df.lon[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='C')]
+       lats=df2.lat[(df2.datetime.dt.hour>=h) & (df2.datetime.dt.hour<h+4-1) & (df2.ground=='G')]
+       lons=df2.lon[(df2.datetime.dt.hour>=h) & (df2.datetime.dt.hour<h+4-1) & (df2.ground=='G')]
+       lats_c=df2.lat[(df2.datetime.dt.hour>=h) & (df2.datetime.dt.hour<h+4-1) & (df2.ground=='C')]
+       lons_c=df2.lon[(df2.datetime.dt.hour>=h) & (df2.datetime.dt.hour<h+4-1) & (df2.ground=='C')]
        try:
            ax2.plot(lons,lats,color=c,marker='+',linestyle='',transform=ccrs.PlateCarree())
            ax2.plot(lons_c,lats_c,color=c,marker='.',linestyle='',transform=ccrs.PlateCarree())
        except:
            print("Problema plottaggio RL")
-       numero_fulmini.append(df.lat[(df.datetime.dt.hour>=h) & (df.datetime.dt.hour<=h+4-1) & (df.ground=='G')].count())
+       numero_fulmini.append(df2.lat[(df2.datetime.dt.hour>=h) & (df2.datetime.dt.hour<=h+4-1) & (df2.ground=='G')].count())
        h+=4
     fname='province.shp'
-    #•ax.set_extent([456387,721553,4977035,5164053])
+    #ax.set_extent([456387,721553,4977035,5164053])
     shape_feature=cfeature.ShapelyFeature(Reader(fname).geometries(),ccrs.PlateCarree(),facecolor='none',edgecolor='green')
     try:
         ax2.add_wms(wms='http://www.cartografia.servizirl.it/arcgis/services/wms/DTM5_RL_wms/MapServer/WMSServer',layers=['DTM_5X5'])
