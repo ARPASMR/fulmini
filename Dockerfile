@@ -9,6 +9,7 @@ RUN conda install -c scitools cartopy
 RUN pip install minio
 RUN pip install Pillow
 RUN pip install flask
+RUN pip install sqlalchemy pg8000
 #RUN pip install Cython 
 #RUN pip install Proj
 #RUN pip install cartopy
