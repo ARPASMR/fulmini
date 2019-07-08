@@ -18,6 +18,7 @@ do
 	mv *.png ./static/
         ps -ef|grep launch_flask|grep -v grep|awk '{print $2}'|xargs kill -9
 	ls -L ./static/*.png > ./static/fof.txt
+	ps -ef|grep launch_flask.sh|grep -v grep|awk '{print $2}'|xargs kill -9
 	./launch_flask.sh &
-        sleep $dormi
+        sleep 300
 done
