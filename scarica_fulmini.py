@@ -125,4 +125,7 @@ VALUES(%s,%s,%s,ST_SetSRID(ST_MakePoint(%s, %s), 4326));
 '''
 for i in df.itertuples():
     vars=[i.data_e_ora,i.int,i.ground,i.lon,i.lat]
-    conn.execute(sql, vars)    
+    try:
+        conn.execute(sql, vars)
+     except:
+        print(f"ERRORE: inserimento non riuscito per {i.data_e_ora}")
