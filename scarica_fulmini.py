@@ -110,11 +110,10 @@ import pandas as pd
 from sqlalchemy import *
 import datetime as dt
 import json as js
-if (AUTORE==None):
-    IRIS_USER_ID=os.getenv('IRIS_USER_ID')
-    IRIS_USER_PWD=os.getenv('IRIS_USER_PWD')
-    IRIS_DB_NAME=os.getenv('IRIS_DB_NAME')
-    IRIS_DB_HOST=os.getenv('IRIS_DB_HOST')
+IRIS_USER_ID=os.getenv('IRIS_USER_ID')
+IRIS_USER_PWD=os.getenv('IRIS_USER_PWD')
+IRIS_DB_NAME=os.getenv('IRIS_DB_NAME')
+IRIS_DB_HOST=os.getenv('IRIS_DB_HOST')
 IRIS_SCHEMA_NAME='public'
 engine = create_engine('postgresql+pg8000://'+IRIS_USER_ID+':'+IRIS_USER_PWD+'@'+IRIS_DB_HOST+'/'+IRIS_DB_NAME)
 conn=engine.connect()
