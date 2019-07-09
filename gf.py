@@ -128,7 +128,7 @@ def graf(nomefile,df):
 
 #    print('inizio plottaggio '+ nomefile)
     plt.show()
-    df.to_csv(path_or_buf=nomefile.split('.')[0]+'_RL.dat',header=False,index=False)
+    df2.to_csv(path_or_buf=nomefile.split('.')[0]+'_RL.dat',header=False,index=False)
     #qui va aggiunta la parte di scrittura nel dbFULMINI
     nomefile_out=nomefile.split('.')[0]+'.png'
     print(nomefile_out)
