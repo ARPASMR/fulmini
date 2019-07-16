@@ -101,8 +101,8 @@ def graf(nomefile,df):
        lats_c=df2.lat[(df2.datetime.dt.hour>=h) & (df2.datetime.dt.hour<h+4-1) & (df2.ground=='C')]
        lons_c=df2.lon[(df2.datetime.dt.hour>=h) & (df2.datetime.dt.hour<h+4-1) & (df2.ground=='C')]
        try:
-           ax2.plot(lons,lats,color=c,marker='+',linestyle='',transform=ccrs.PlateCarree())
-           ax2.plot(lons_c,lats_c,color=c,marker='.',linestyle='',transform=ccrs.PlateCarree())
+           ax2.scatter(lons,lats,color=c,marker='+',transform=ccrs.PlateCarree())
+           ax2.scatter(lons_c,lats_c,color=c,marker='.',transform=ccrs.PlateCarree())
        except:
            print("Problema plottaggio RL")
        numero_fulmini.append(df2.lat[(df2.datetime.dt.hour>=h) & (df2.datetime.dt.hour<=h+4-1) & (df2.ground=='G')].count())
