@@ -127,5 +127,5 @@ for i in df.itertuples():
     vars=[i.data_e_ora,i.int,i.ground,i.lon,i.lat]
     try:
         conn.execute(sql, vars)
-     except:
+    except:
         print(f"ERRORE: inserimento non riuscito per {i.data_e_ora}")
