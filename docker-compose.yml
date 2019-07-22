@@ -1,0 +1,15 @@
+version: "3"
+services:
+  ful:
+    # immagine
+    image: arpasmr/fulmini:cartopy
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "8890:8890"
+    environment:
+      - http_proxy='put/your/proxy/here'
+      - https_proxy= 'put/your/proxy/here'
+      - FTP_PASS='remember to double escape $'
