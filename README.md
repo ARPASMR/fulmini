@@ -12,3 +12,11 @@ Occorre inserire manualmente la password per il trasferimento FTP come variabili
 
 Occorre anche inserire i proxy http
 
+# uso di compose
+si può usare il file .yml per creare uno stack in UCP
+
+# forzare l'update del servizio
+Nel Master1:
+```
+docker service update --force --image arpasmr/fulmini:cartopy Fulmini_ful
+```
