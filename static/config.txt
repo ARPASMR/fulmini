@@ -2,6 +2,7 @@ debug=false
 window_size=1500,700
 file_of_filenames=./static/fof.txt
 #basename=./static/201*????.png
+background_static=n
 wheel_frames = true
 num_frames=9
 base_starting_number=1
