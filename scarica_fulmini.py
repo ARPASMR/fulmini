@@ -33,7 +33,7 @@ from ftplib import FTP
 import matplotlib.pyplot as plt
 import warnings
 import matplotlib.cbook
-from minio import Minio
+#from minio import Minio
 warnings.filterwarnings("ignore",category=matplotlib.cbook.mplDeprecation)
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 # cartopy
@@ -126,6 +126,7 @@ VALUES(%s,%s,%s,ST_SetSRID(ST_MakePoint(%s, %s), 4326));
 for i in df.itertuples():
     vars=[i.data_e_ora,i.int,i.ground,i.lon,i.lat]
     try:
-        conn.execute(sql, vars)
-     except:
+       # conn.execute(sql, vars)
+       print("insert")
+    except:
         print(f"ERRORE: inserimento non riuscito per {i.data_e_ora}")
