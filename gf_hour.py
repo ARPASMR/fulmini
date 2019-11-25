@@ -48,7 +48,7 @@ def graf(nomefile,df):
     data_inizio=dt.datetime.utcnow()-dt.timedelta(hours=hour)
     # controllo se la data_inizio va a ieri: se sì, carico il file e lo metto nel df
     nomefile_ieri=data_inizio.strftime('%Y%m%d')+'.dat'
-    if (nomefile_ieri<>nomefile):
+    if (nomefile_ieri != nomefile):
         df0=pd.read_csv(filepath_or_buffer=nomefile_ieri,sep='\s+',names=['date','time','lat','lon','int','unit','ground'],parse_dates={'datetime':['date','time']})
         df=pd(concat([df0,df]))
 
