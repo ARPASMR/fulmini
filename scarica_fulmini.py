@@ -16,7 +16,7 @@ versione con cartopy al posto di basemap
     -> leggo il df
     -> appendo il df
     -> scrivo il nuovo df
- 6. plottaggio 
+ 6. plottaggio
  7. copio su minio di ARPA
 
  NOTA: too many I/O may slower the process
@@ -48,7 +48,7 @@ REMOTE_DIR='/lampi'
 ftp=FTP()
 # funzione di graficazione fulmini
 
-import gf
+import gf,gf_hour
 
 # 1.
 ftp.connect(host='proxy2.arpa.local',port=2121)
@@ -69,7 +69,7 @@ except:
 # 2.
 
     #lastdata=df.date.iloc[-1]
-# 3.4.5. elenco file contiene l'elenco dei file su meteora: devo scaricare solo quelli che non ho già scaricato  
+# 3.4.5. elenco file contiene l'elenco dei file su meteora: devo scaricare solo quelli che non ho già scaricato
 
 for nf in elenco_file:
     comando='RETR '+ nf
@@ -83,13 +83,21 @@ cntl.to_csv(path_or_buf=file_controllo, header=False,index=False)
 # read file input con dati
 df=pd.read_csv(filepath_or_buffer=nomefile,sep='\s+',names=['date','time','lat','lon','int','unit','ground'],parse_dates={'datetime':['date','time']})
 
-
-try: 
+# plottaggio dei fulmini data attuale
+try:
     gf.graf(nomefile,df)
 except:
-    print( 'ERRORE: file '+ nomefile + ' non trovato o errore in gf') 
+    print( 'ERRORE: file '+ nomefile + ' non trovato o errore in gf')
 
-# trasferimento a minio    
+#plottaggio dei fulmini 24,6,3,1
+try:
+    gf_hour.graf(nomefile,df)
+except:
+    print( 'ERRORE: file '+ nomefile + ' non trovato o errore in gf_hour')
+
+
+
+# trasferimento a minio
 minioClient=Minio('10.10.99.135:9000',access_key='ACCESS_KEY',secret_key='SECRET_KEY',secure=False)
 try:
     with open(nomeimg,'rb') as file_data:
@@ -120,7 +128,7 @@ conn=engine.connect()
 nf=nomefile.split('.')[0]+'_RL.dat'
 df=pd.read_csv(nf,sep=',',header=None,names=['data_e_ora','lat','lon','int','unit','ground'])
 sql = '''\
-INSERT INTO public.stroke (data_e_ora, int, ground, geometry) 
+INSERT INTO public.stroke (data_e_ora, int, ground, geometry)
 VALUES(%s,%s,%s,ST_SetSRID(ST_MakePoint(%s, %s), 4326));
 '''
 for i in df.itertuples():
