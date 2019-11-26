@@ -31,11 +31,7 @@ def graf(nomefile,df):
     riquadro= lista contenente le informazioni per la selezione dell'area
     lista_ore    = definisce il numero di ore che viene considerato nel df
     """
-    # formattazione della figura
-    fig = plt.figure(num=None, figsize=(16,7 ),dpi=160 )
-    #formattazione del primo subplot: Italia
-    ax=fig.add_subplot(1,2,1,projection=ccrs.PlateCarree())
-    ax.set_extent([6,19,36,48.2],crs=ccrs.PlateCarree())
+
 
     colori=['#8B008B','#C71585','#FF4500','#FFA500','#FFD700','#FFFF00']
     c='#8B008B'
@@ -55,6 +51,11 @@ def graf(nomefile,df):
     lista_ore=[24,6,3,1]
     df1=df[(df.lat>riquadro[0]) & (df.lat<riquadro[2]) & (df.lon>riquadro[1]) & (df.lon<riquadro[3])]
     for h in lista_ore:
+        # formattazione della figura
+        fig = plt.figure(num=None, figsize=(16,7 ),dpi=160 )
+        #formattazione del primo subplot: Italia
+        ax=fig.add_subplot(1,2,1,projection=ccrs.PlateCarree())
+        ax.set_extent([6,19,36,48.2],crs=ccrs.PlateCarree())
         plt.suptitle(f"Fulmini totali dal giorno {nomefile.split('.')[0]} alle {dt.datetime.utcnow().strftime('%H:%M UTC')} indietro -{h}" , fontsize=16)
         data_inizio=dt.datetime.utcnow()-dt.timedelta(hours=h)
         lats=df1.lat[(df1.datetime>=data_inizio) & (df1.ground=='G')]
