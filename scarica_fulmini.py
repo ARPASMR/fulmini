@@ -98,6 +98,7 @@ except:
 
 
 # trasferimento a minio
+from minio import Minio
 minioClient=Minio('10.10.99.135:9000',access_key='ACCESS_KEY',secret_key='SECRET_KEY',secure=False)
 try:
     with open(nomeimg,'rb') as file_data:

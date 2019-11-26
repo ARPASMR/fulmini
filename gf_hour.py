@@ -36,9 +36,9 @@ def graf(nomefile,df):
     #formattazione del primo subplot: Italia
     ax=fig.add_subplot(1,2,1,projection=ccrs.PlateCarree())
     ax.set_extent([6,19,36,48.2],crs=ccrs.PlateCarree())
-    plt.suptitle("Fulmini del giorno " + nomefile.split('.')[0]+' alle '+dt.datetime.utcnow().strftime('%H:%M UTC'), fontsize=16)
+    plt.suptitle(f"Fulmini totali dal giorno {nomefile.split('.')[0]} alle {dt.datetime.utcnow().strftime('%H:%M UTC')} indietro -{hour}' , fontsize=16)
     colori=['#8B008B','#C71585','#FF4500','#FFA500','#FFD700','#FFFF00']
-    c='#FFFF00'
+    c='#8B008B'
     riquadro=[36,6,48.2,19]
     #df1=df
 
@@ -50,7 +50,7 @@ def graf(nomefile,df):
     nomefile_ieri=data_inizio.strftime('%Y%m%d')+'.dat'
     if (nomefile_ieri != nomefile):
         df0=pd.read_csv(filepath_or_buffer=nomefile_ieri,sep='\s+',names=['date','time','lat','lon','int','unit','ground'],parse_dates={'datetime':['date','time']})
-        df=pd(concat([df0,df]))
+        df=pd.concat([df0,df])
 
     lista_ore=[24,6,3,1]
     df1=df[(df.lat>riquadro[0]) & (df.lat<riquadro[2]) & (df.lon>riquadro[1]) & (df.lon<riquadro[3])]
@@ -143,7 +143,7 @@ def graf(nomefile,df):
         plt.show()
         #df2.to_csv(path_or_buf=nomefile.split('.')[0]+'_RL.dat',header=False,index=False)
         #qui va aggiunta la parte di scrittura nel dbFULMINI
-        nomefile_out=nomefile.split('.')[0]+str(h)+'.png'
+        nomefile_out=nomefile.split('.')[0]+'_'+str(h)+'.png'
         print(nomefile_out)
         try:
             plt.savefig(nomefile_out,dpi=160)
