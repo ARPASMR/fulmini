@@ -36,7 +36,7 @@ def graf(nomefile,df):
     #formattazione del primo subplot: Italia
     ax=fig.add_subplot(1,2,1,projection=ccrs.PlateCarree())
     ax.set_extent([6,19,36,48.2],crs=ccrs.PlateCarree())
-    plt.suptitle(f"Fulmini totali dal giorno {nomefile.split('.')[0]} alle {dt.datetime.utcnow().strftime('%H:%M UTC')} indietro -{hour}' , fontsize=16)
+    plt.suptitle(f"Fulmini totali dal giorno {nomefile.split('.')[0]} alle {dt.datetime.utcnow().strftime('%H:%M UTC')} indietro -{hour}" , fontsize=16)
     colori=['#8B008B','#C71585','#FF4500','#FFA500','#FFD700','#FFFF00']
     c='#8B008B'
     riquadro=[36,6,48.2,19]
