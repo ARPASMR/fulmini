@@ -76,16 +76,18 @@ def graf(nomefile,df):
         shape_feature=cfeature.ShapelyFeature(Reader(fname).geometries(),ccrs.PlateCarree(),facecolor=cfeature.COLORS['land'],edgecolor='green')
         ax.add_feature(shape_feature,zorder=-1)
         LAKES= cfeature.NaturalEarthFeature('physical', 'lakes', '10m', edgecolor='face', facecolor=cfeature.COLORS['water'])
-        ax.add_feature(LAKES)
+        #ax.add_feature(LAKES)
         RIVERS= cfeature.NaturalEarthFeature('physical', 'rivers_lake_centerlines', '10m', edgecolor=cfeature.COLORS['water'], facecolor='none')
-        ax.add_feature(RIVERS)
+        #ax.add_feature(RIVERS)
         COASTLINES= cfeature.NaturalEarthFeature('physical', 'coastline', '10m', edgecolor='black', facecolor='none')
         ax.add_feature(COASTLINES)
         #OCEAN= cfeature.NaturalEarthFeature('physical', 'ocean', '50m', edgecolor='none')
         #ax.add_feature(OCEAN)
         #STATES= cfeature.NaturalEarthFeature('cultural', 'admin_0_boundary_lines_land', '50m' )
         #ax.add_feature(STATES, edgecolor='black' )
-
+        img_extent = (36,48.2,6,19)
+        img = plt.imread("mappa_sfondo.jpg")
+        ax.imshow(img,origin='lower',extent=img_extent, transform=ccrs.PlateCarree())
         numero_fulmini=[]
         try:
                ax.plot(lons,lats,color=c,marker='+',markersize=4,linestyle='',zorder=1)
