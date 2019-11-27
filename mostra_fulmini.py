@@ -16,5 +16,14 @@ app.config['AWS_SECRET_ACCESS_KEY']='SECRET_KEY'
 @app.route("/")
 def hello():
     return render_template('skeleton.html')
+@app.after_request
+def add_header(response):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
+    response.headers['Cache-Control'] = 'public, max-age=0'
+    return response
 if __name__=="__main__":
     app.run(host='0.0.0.0',port=8890,debug=True)

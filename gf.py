@@ -51,8 +51,9 @@ def graf(nomefile,df):
         #land_50m=cfeature.NaturalEarthFeature('physical',name='land',scale='10m')
         #ax.add_feature(land_50m, facecolor=cfeature.COLORS['land'])
     fname='Reg_2016_LATLON.shp'
-    shape_feature=cfeature.ShapelyFeature(Reader(fname).geometries(),ccrs.PlateCarree(),facecolor=cfeature.COLORS['land'],edgecolor='green')
-    ax.add_feature(shape_feature,zorder=-1)
+    ax.add_wms(wms='http://eumetview.eumetsat.int/geoserver/wms',layers=['bkg-raster'])
+    #shape_feature=cfeature.ShapelyFeature(Reader(fname).geometries(),ccrs.PlateCarree(),facecolor=cfeature.COLORS['land'],edgecolor='green')
+    #ax.add_feature(shape_feature,zorder=-1)
     LAKES= cfeature.NaturalEarthFeature('physical', 'lakes', '10m', edgecolor='face', facecolor=cfeature.COLORS['water'])
     ax.add_feature(LAKES)
     RIVERS= cfeature.NaturalEarthFeature('physical', 'rivers_lake_centerlines', '10m', edgecolor=cfeature.COLORS['water'], facecolor='none')
