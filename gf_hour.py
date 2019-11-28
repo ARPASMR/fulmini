@@ -50,13 +50,15 @@ def graf(nomefile,df):
 
     lista_ore=[24,6,3,1]
     df1=df[(df.lat>riquadro[0]) & (df.lat<riquadro[2]) & (df.lon>riquadro[1]) & (df.lon<riquadro[3])]
+    c=0
     for h in lista_ore:
         # formattazione della figura
+        c+=1
         fig = plt.figure(num=None, figsize=(16,7 ),dpi=160 )
         #formattazione del primo subplot: Italia
         ax=fig.add_subplot(1,2,1,projection=ccrs.PlateCarree())
         ax.set_extent([6,19,36,48.2],crs=ccrs.PlateCarree())
-        plt.suptitle(f"Fulmini totali dal giorno {nomefile.split('.')[0]} alle {dt.datetime.utcnow().strftime('%H:%M UTC')} indietro -{h}" , fontsize=16)
+        plt.suptitle(f"Fulmini totali dal giorno {nomefile.split('.')[0]} alle {dt.datetime.utcnow().strftime('%H:%M UTC')} indietro -{h}:00H" , fontsize=16)
         data_inizio=dt.datetime.utcnow()-dt.timedelta(hours=h)
         lats=df1.lat[(df1.datetime>=data_inizio) & (df1.ground=='G')]
         lons=df1.lon[(df1.datetime>=data_inizio) & (df1.ground=='G')]
@@ -90,8 +92,8 @@ def graf(nomefile,df):
         ax.imshow(img,origin='upper',extent=img_extent, transform=ccrs.PlateCarree())
         numero_fulmini=[]
         try:
-               ax.plot(lons,lats,color=c,marker='+',markersize=4,linestyle='',zorder=1)
-               ax.plot(lons_c,lats_c,color=c,marker='.',markersize=4,linestyle='',zorder=1)
+               ax.plot(lons,lats,color=colori[c],marker='+',markersize=4,linestyle='',zorder=1)
+               ax.plot(lons_c,lats_c,color=colori[c],marker='.',markersize=4,linestyle='',zorder=1)
         except:
                print("Problema plottaggio")
         #numero_fulmini.append(df1.lat[(df.datetime.dt.hour>=h) & (df1.datetime.dt.hour<=h+4-1) & (df1.ground=='G')].count())
@@ -147,7 +149,8 @@ def graf(nomefile,df):
         plt.show()
         #df2.to_csv(path_or_buf=nomefile.split('.')[0]+'_RL.dat',header=False,index=False)
         #qui va aggiunta la parte di scrittura nel dbFULMINI
-        nomefile_out=nomefile.split('.')[0]+'_'+str(h)+'.png'
+
+        nomefile_out=nomefile.split('.')[0]+'_'+str(h).zfill(2)+'.png'
         print(nomefile_out)
         try:
             plt.savefig(nomefile_out,dpi=160)
