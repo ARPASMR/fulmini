@@ -85,9 +85,9 @@ def graf(nomefile,df):
         #ax.add_feature(OCEAN)
         #STATES= cfeature.NaturalEarthFeature('cultural', 'admin_0_boundary_lines_land', '50m' )
         #ax.add_feature(STATES, edgecolor='black' )
-        img_extent = (36,48.2,6,19)
+        img_extent = (6,19,36,48.2)
         img = plt.imread("mappa_sfondo.jpg")
-        ax.imshow(img,origin='lower',extent=img_extent, transform=ccrs.PlateCarree())
+        ax.imshow(img,origin='upper',extent=img_extent, transform=ccrs.PlateCarree())
         numero_fulmini=[]
         try:
                ax.plot(lons,lats,color=c,marker='+',markersize=4,linestyle='',zorder=1)
