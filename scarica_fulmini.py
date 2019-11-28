@@ -84,6 +84,7 @@ cntl.to_csv(path_or_buf=file_controllo, header=False,index=False)
 df=pd.read_csv(filepath_or_buffer=nomefile,sep='\s+',names=['date','time','lat','lon','int','unit','ground'],parse_dates={'datetime':['date','time']})
 
 # plottaggio dei fulmini data attuale
+gf_hour.graf(nomefile,df)
 try:
     gf.graf(nomefile,df)
 except:
@@ -91,7 +92,7 @@ except:
 
 #plottaggio dei fulmini 24,6,3,1
 #try:
-gf_hour.graf(nomefile,df)
+# invertito gf_hour e gf
 #except:
 #    print( 'ERRORE: file '+ nomefile + ' non trovato o errore in gf_hour')
 
@@ -125,7 +126,7 @@ IRIS_DB_NAME=os.getenv('IRIS_DB_NAME')
 IRIS_DB_HOST=os.getenv('IRIS_DB_HOST')
 IRIS_SCHEMA_NAME='public'
 engine = create_engine('postgresql+pg8000://'+IRIS_USER_ID+':'+IRIS_USER_PWD+'@'+IRIS_DB_HOST+'/'+IRIS_DB_NAME)
-conn=engine.connect()
+#conn=engine.connect()
 nf=nomefile.split('.')[0]+'_RL.dat'
 df=pd.read_csv(nf,sep=',',header=None,names=['data_e_ora','lat','lon','int','unit','ground'])
 sql = '''\
