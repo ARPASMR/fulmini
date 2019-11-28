@@ -40,7 +40,7 @@ def graf(nomefile,df):
 
     # seleziono dal dataframe solo i dati che mi interessano: se non li ho tutti allora vado indietro
     # e carico il file di ieri
-    hours=24
+    hour=24
     data_inizio=dt.datetime.utcnow()-dt.timedelta(hours=hour)
     # controllo se la data_inizio va a ieri: se sì, carico il file e lo metto nel df
     nomefile_ieri=data_inizio.strftime('%Y%m%d')+'.dat'

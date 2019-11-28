@@ -19,6 +19,7 @@ COPY *.py ./
 COPY *.sh ./
 COPY province.* ./
 COPY Reg_2016_L*.* ./
+COPY mappa_sfondo.jpg ./
 RUN mkdir templates
 RUN touch file_controllo.txt
 COPY templates/* templates/

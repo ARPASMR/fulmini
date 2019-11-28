@@ -90,10 +90,10 @@ except:
     print( 'ERRORE: file '+ nomefile + ' non trovato o errore in gf')
 
 #plottaggio dei fulmini 24,6,3,1
-try:
-    gf_hour.graf(nomefile,df)
-except:
-    print( 'ERRORE: file '+ nomefile + ' non trovato o errore in gf_hour')
+#try:
+gf_hour.graf(nomefile,df)
+#except:
+#    print( 'ERRORE: file '+ nomefile + ' non trovato o errore in gf_hour')
 
 
 
